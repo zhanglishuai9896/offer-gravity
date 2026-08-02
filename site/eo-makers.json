@@ -1,4 +1,4 @@
 {
   "framework": "other",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist/client"
 }
