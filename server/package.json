@@ -1,13 +1,17 @@
 {
-  "name": "offer-yinli-workspace",
+  "name": "offer-yinli",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "test": "npm --prefix server test && npm --prefix site test"
+    "test": "node --test"
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "mammoth": "^1.12.0",
+    "pdf-parse": "^2.4.5"
   }
 }

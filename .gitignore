@@ -2,5 +2,6 @@
 .env.*
 !.env.example
 node_modules/
-data/store.json
+server/node_modules/
+server/data/store.json
 *.log

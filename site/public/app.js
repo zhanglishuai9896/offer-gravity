@@ -5,6 +5,7 @@ const CHANNEL_LABELS = { platform: "招聘平台", official: "官方申请页", 
 const FREE_ANALYSIS_LIMIT = 10;
 const AUTH_TOKEN_KEY = "offer-index-auth-token";
 const PAID_PLAN_IDS = new Set(["sprint14", "pro30", "concierge30", "pro14"]);
+const { apiFetch } = window.offerApi;
 const DEFAULT_STATE = {
   version: 2,
   deviceId: crypto.randomUUID(),
@@ -87,7 +88,7 @@ function authHeaders(extra = {}) {
 }
 
 async function track(type, data = {}) {
-  try { await fetch("/api/events", { method: "POST", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ type, data }) }); } catch {}
+  try { await apiFetch("/api/events", { method: "POST", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ type, data }) }); } catch {}
 }
 
 function escapeHtml(value = "") {
@@ -240,7 +241,7 @@ async function runOutcomeReview(index) {
   if ((state.plan.reviewUsed || 0) >= 2 && state.plan.id === "sprint14") return showToast("14 天方案的两次复盘已经使用完毕");
   try {
     const previousReview = state.reviews?.[state.reviews.length - 1] || null;
-    const response = await fetch("/api/outcome-review", { method: "POST", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ jobs: state.jobs, previousReview }) });
+    const response = await apiFetch("/api/outcome-review", { method: "POST", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ jobs: state.jobs, previousReview }) });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "复盘失败");
     state.reviews ||= [];
@@ -326,7 +327,7 @@ async function analyzeMbti(event) {
   button.disabled = true;
   button.textContent = "正在生成职业画像…";
   try {
-    const response = await fetch("/api/mbti-analysis", {
+    const response = await apiFetch("/api/mbti-analysis", {
       method: "POST",
       headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ profile: state.profile, answers })
@@ -362,7 +363,7 @@ async function analyzePersonality(event) {
   button.disabled = true;
   button.textContent = "正在生成画像…";
   try {
-    const response = await fetch("/api/personality-analysis", {
+    const response = await apiFetch("/api/personality-analysis", {
       method: "POST",
       headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ profile: state.profile, answers })
@@ -471,7 +472,7 @@ async function prepareBossQueue(event) {
   const button = $("#prepare-boss-queue");
   button.disabled = true; button.textContent = "正在筛选并准备材料…";
   try {
-    const response = await fetch("/api/application-queue/prepare", {
+    const response = await apiFetch("/api/application-queue/prepare", {
       method: "POST", headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ profile: state.profile, opportunities: state.opportunities, settings, resumeRewrite: settings.resumeMode === "targeted" ? state.resumeRewrite : null })
     });
@@ -492,7 +493,7 @@ async function submitBossApplication(id) {
   if (!item) return;
   if (!accountUser) { navigate("settings"); showToast("通过官方接口提交前请先登录账号"); return; }
   try {
-    const response = await fetch("/api/connectors/boss/submit", {
+    const response = await apiFetch("/api/connectors/boss/submit", {
       method: "POST", headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ application: item, userConfirmed: true })
     });
@@ -543,7 +544,7 @@ async function addOpportunity(event) {
   button.disabled = true;
   button.textContent = "正在匹配…";
   try {
-    const response = await fetch("/api/match-opportunity", {
+    const response = await apiFetch("/api/match-opportunity", {
       method: "POST",
       headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ profile: state.profile, personalityAnalysis: combinedPersonalityAnalysis(), opportunity })
@@ -565,7 +566,7 @@ async function addOpportunity(event) {
 }
 
 async function matchCollectedOpportunity(opportunity) {
-  const response = await fetch("/api/match-opportunity", {
+  const response = await apiFetch("/api/match-opportunity", {
     method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ profile: state.profile, personalityAnalysis: combinedPersonalityAnalysis(), opportunity: { ...opportunity, publisher: opportunity.company || opportunity.publisher } })
   });
@@ -585,7 +586,7 @@ async function collectSource(event) {
   status.className = "collector-status is-working";
   status.textContent = "正在读取公开信息、过滤过期岗位并去重。";
   try {
-    const response = await fetch("/api/opportunities/collect", {
+    const response = await apiFetch("/api/opportunities/collect", {
       method: "POST", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ ...source, limit: 30, save: Boolean(accountUser) })
     });
     const payload = await response.json();
@@ -621,7 +622,7 @@ async function handleResumeFile(file) {
   });
   try {
     showToast("正在解析简历文件…");
-    const response = await fetch("/api/resume/extract", {
+    const response = await apiFetch("/api/resume/extract", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fileName: file.name, mimeType: file.type, base64 })
     });
@@ -661,11 +662,11 @@ function renderCommercial() {
 async function refreshAccount() {
   if (!authToken) { accountUser = null; renderCommercial(); return; }
   try {
-    const response = await fetch("/api/auth/me", { headers: authHeaders() });
+    const response = await apiFetch("/api/auth/me", { headers: authHeaders() });
     if (!response.ok) throw new Error("登录已失效");
     accountUser = (await response.json()).user;
     state.plan = { ...state.plan, id: accountUser.plan?.id || "free" };
-    const notificationsResponse = await fetch("/api/notifications", { headers: authHeaders() });
+    const notificationsResponse = await apiFetch("/api/notifications", { headers: authHeaders() });
     if (notificationsResponse.ok) {
       const notificationPayload = await notificationsResponse.json();
       const existing = new Set(state.opportunities.map((item) => item.fingerprint || item.url).filter(Boolean));
@@ -687,7 +688,7 @@ async function submitAccount(event) {
   button.disabled = true;
   button.textContent = authMode === "login" ? "正在登录…" : "正在创建账号…";
   try {
-    const response = await fetch(`/api/auth/${authMode}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const response = await apiFetch(`/api/auth/${authMode}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "账号操作失败");
     authToken = payload.token;
@@ -702,7 +703,7 @@ async function submitAccount(event) {
 
 async function uploadCloud() {
   try {
-    const response = await fetch("/api/cloud/state", { method: "PUT", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ state }) });
+    const response = await apiFetch("/api/cloud/state", { method: "PUT", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ state }) });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "同步失败");
     showToast("当前数据已安全同步到账号");
@@ -712,7 +713,7 @@ async function uploadCloud() {
 
 async function downloadCloud() {
   try {
-    const response = await fetch("/api/cloud/state", { headers: authHeaders() });
+    const response = await apiFetch("/api/cloud/state", { headers: authHeaders() });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "读取云端数据失败");
     if (!payload.cloud?.state) return showToast("账号中还没有云端备份");
@@ -730,7 +731,7 @@ async function checkout(planId) {
     return;
   }
   try {
-    const response = await fetch("/api/billing/checkout", { method: "POST", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ planId }) });
+    const response = await apiFetch("/api/billing/checkout", { method: "POST", headers: authHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ planId }) });
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.next || payload.error || "暂时无法发起支付");
     if (payload.checkoutUrl) {
@@ -788,7 +789,7 @@ async function rewriteResume(event) {
   button.textContent = "正在重组简历…";
   hint.textContent = "正在核对真实经历与目标岗位";
   try {
-    const response = await fetch("/api/rewrite-resume", {
+    const response = await apiFetch("/api/rewrite-resume", {
       method: "POST",
       headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ profile: state.profile, target, deviceId: state.deviceId })
@@ -849,7 +850,7 @@ async function analyzeCareer() {
   button.disabled = true;
   button.textContent = "正在分析你的情况…";
   try {
-    const response = await fetch("/api/career-analysis", {
+    const response = await apiFetch("/api/career-analysis", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ profile: state.profile, deviceId: state.deviceId })
@@ -1045,7 +1046,7 @@ async function analyzeJob(event) {
   button.textContent = "正在分析…";
   hint.textContent = config.aiEnabled ? "正在核对材料证据" : "正在运行本地匹配规则";
   try {
-    const response = await fetch("/api/analyze", {
+    const response = await apiFetch("/api/analyze", {
       method: "POST",
       headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ profile: state.profile, job, deviceId: state.deviceId })
@@ -1228,12 +1229,12 @@ function bindEvents() {
   $("#cloud-upload").addEventListener("click", uploadCloud);
   $("#cloud-download").addEventListener("click", downloadCloud);
   $("#account-logout").addEventListener("click", async () => {
-    try { await fetch("/api/auth/logout", { method: "POST", headers: authHeaders() }); } catch {}
+    try { await apiFetch("/api/auth/logout", { method: "POST", headers: authHeaders() }); } catch {}
     authToken = ""; accountUser = null; localStorage.removeItem(AUTH_TOKEN_KEY); state.plan = { id: "free", reviewUsed: 0 }; saveState(); showToast("已退出账号");
   });
   $("#account-delete").addEventListener("click", async () => {
     if (!confirm("确定删除账号、云端档案、通知订阅和全部云端记录吗？此操作无法撤销。")) return;
-    const response = await fetch("/api/account", { method: "DELETE", headers: authHeaders() });
+    const response = await apiFetch("/api/account", { method: "DELETE", headers: authHeaders() });
     if (!response.ok) return showToast("账号删除失败，请稍后重试");
     authToken = ""; accountUser = null; localStorage.removeItem(AUTH_TOKEN_KEY); showToast("账号和云端数据已删除"); renderAll();
   });
@@ -1266,7 +1267,7 @@ async function init() {
   $("#today").textContent = new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
   bindEvents();
   try {
-    const response = await fetch("/api/config");
+    const response = await apiFetch("/api/config");
     if (response.ok) config = await response.json();
   } catch {}
   if ("serviceWorker" in navigator) {
