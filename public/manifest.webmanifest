@@ -1,0 +1,10 @@
+{
+  "name": "Offer 引力",
+  "short_name": "Offer 引力",
+  "start_url": "/#dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "lang": "zh-CN",
+  "icons": []
+}

@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Offer 引力：让合适的工作主动靠近你。全行业 AI 求职分析、机会雷达与智能投递系统。" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Offer 引力｜让好工作主动靠近你</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#dashboard" aria-label="回到总览">
+          <span class="brand-mark">引</span>
+          <span><strong>Offer 引力</strong><small>AI 求职决策系统</small></span>
+        </a>
+
+        <nav class="nav" aria-label="主导航">
+          <button class="nav-item is-active" data-view="dashboard"><span class="nav-index">01</span><span class="nav-copy"><strong>求职总览</strong><small>查看进度、回复率与下一步</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="career"><span class="nav-index">02</span><span class="nav-copy"><strong>AI 求职分析</strong><small>判断方向、优势与当前缺口</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="personality"><span class="nav-index">03</span><span class="nav-copy"><strong>性格与工作环境</strong><small>发现更适合你的岗位与团队</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="mbti"><span class="nav-index">04</span><span class="nav-copy"><strong>MBTI 职业性格</strong><small>用 20 个情境发现职业偏好</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="radar"><span class="nav-index">05</span><span class="nav-copy"><strong>全职业机会雷达</strong><small>收集多平台机会并匹配提醒</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="autoapply"><span class="nav-index">06</span><span class="nav-copy"><strong>BOSS 智能投递</strong><small>筛选高匹配岗位并准备投递</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="resume"><span class="nav-index">07</span><span class="nav-copy"><strong>AI 改写简历</strong><small>按目标岗位重组真实证据</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="analyze"><span class="nav-index">08</span><span class="nav-copy"><strong>岗位判断</strong><small>看匹配、风险和是否值得投</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="pipeline"><span class="nav-index">09</span><span class="nav-copy"><strong>投递中心</strong><small>管理材料、状态与真实结果</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="service"><span class="nav-index">10</span><span class="nav-copy"><strong>14 天求职方案</strong><small>100 次分析＋策略＋两次复盘</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="profile"><span class="nav-index">11</span><span class="nav-copy"><strong>我的档案</strong><small>管理经历、目标和真实材料</small></span><span class="nav-arrow">→</span></button>
+          <button class="nav-item" data-view="settings"><span class="nav-index">12</span><span class="nav-copy"><strong>数据与设置</strong><small>导出、恢复或删除个人数据</small></span><span class="nav-arrow">→</span></button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-plan"><span>当前方案</span><strong id="sidebar-plan-name">免费体验</strong><small id="sidebar-plan-usage">剩余 10 个岗位分析</small></div>
+          <button class="sidebar-upgrade" data-go="service" type="button">查看 59 元方案 <span>→</span></button>
+          <div class="sidebar-mode"><span class="status-dot"></span><span id="mode-label">正在检查分析模式</span></div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <p><span id="today"></span> / 求职决策工作台</p>
+          <button class="ghost-btn mobile-menu" id="mobile-menu" type="button">菜单</button>
+          <button class="ghost-btn account-shortcut" id="account-shortcut" data-go="settings" type="button">本地模式</button>
+          <button class="primary-btn" data-go="analyze" type="button">＋ 新岗位分析</button>
+        </header>
+
+        <section class="view is-active" id="view-dashboard">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <p class="eyebrow">Offer 引力 / 001</p>
+              <h1>让好工作，<br /><em>主动靠近你。</em></h1>
+              <p class="hero-description">适用于全部行业。AI 分析你的经历与目标，持续发现高匹配机会、准备专属材料，并让每一次投递更接近 Offer。</p>
+              <button class="text-link" data-go="career" type="button">分析我的求职情况 <span>→</span></button>
+            </div>
+            <div class="profile-ticket" id="profile-ticket">
+              <div class="ticket-top"><span>CANDIDATE PROFILE</span><span id="profile-completion">0%</span></div>
+              <div class="ticket-role" id="ticket-role">尚未填写目标岗位</div>
+              <div class="ticket-meta"><span id="ticket-city">城市待定</span><span id="ticket-years">经验待定</span></div>
+              <button class="ticket-edit" data-go="profile" type="button">完善个人档案</button>
+            </div>
+          </div>
+
+          <div class="section-heading">
+            <div><p class="eyebrow">LIVE FUNNEL</p><h2>本轮投递</h2></div>
+            <span class="section-note">本地优先 · 登录后可云同步</span>
+          </div>
+          <div class="stats-grid" id="stats-grid"></div>
+
+          <div class="dashboard-grid">
+            <article class="panel recent-panel">
+              <div class="panel-head"><h3>最近分析</h3><button class="text-btn" data-go="pipeline" type="button">查看全部</button></div>
+              <div id="recent-jobs" class="job-list empty-state">还没有岗位。先完成第一份分析。</div>
+            </article>
+            <article class="panel insight-panel">
+              <p class="eyebrow">NEXT MOVE</p>
+              <h3 id="next-move-title">先完善求职档案</h3>
+              <p id="next-move-text">完整的简历和目标偏好，会让岗位判断更可靠。</p>
+              <button class="outline-btn" id="next-move-btn" data-go="profile" type="button">现在去完成</button>
+            </article>
+          </div>
+
+          <section class="plans-section" aria-labelledby="plans-title">
+            <div class="section-heading">
+              <div><p class="eyebrow">SERVICE PLAN</p><h2 id="plans-title">先免费验证，再决定升级</h2></div>
+              <span class="section-note" id="plan-usage">免费额度 0 / 10</span>
+            </div>
+            <div class="plans-grid commercial-plans-grid">
+              <article class="plan-card">
+                <div class="plan-top"><span class="plan-name">免费体验</span><strong>¥0</strong></div>
+                <p>适合先验证岗位判断是否有用。</p>
+                <ul><li>免费分析 10 个岗位</li><li>查看匹配证据与主要风险</li><li>生成针对性招呼语</li></ul>
+                <button class="outline-btn" data-go="analyze" type="button">开始免费分析</button>
+              </article>
+              <article class="plan-card plan-card-featured">
+                <div class="plan-top"><span class="plan-name">14 天求职方案</span><strong><small>¥</small>59</strong></div>
+                <p>两周高强度求职验证，包含合理使用范围内的 100 次岗位判断。</p>
+                <ul><li>100 次岗位分析</li><li>每日机会雷达汇总</li><li>BOSS 智能投递队列</li><li>12 次针对性简历</li><li>14 天策略与 2 次复盘</li></ul>
+                <button class="primary-btn" data-checkout="sprint14" type="button">开通 59 元方案</button>
+              </article>
+              <article class="plan-card">
+                <div class="plan-top"><span class="plan-name">30 天专业版</span><strong><small>¥</small>129</strong></div>
+                <p>适合正在持续投递、需要即时机会提醒的求职者。</p>
+                <ul><li>300 次岗位分析</li><li>即时机会雷达提醒</li><li>BOSS 智能投递队列</li><li>30 次针对性简历</li><li>4 次结果复盘</li></ul>
+                <button class="outline-btn" data-checkout="pro30" type="button">选择专业版</button>
+              </article>
+              <article class="plan-card">
+                <div class="plan-top"><span class="plan-name">30 天陪跑版</span><strong><small>¥</small>299</strong></div>
+                <p>AI 工具加人工复盘席位，适合转行或长期没有回复的人。</p>
+                <ul><li>500 次岗位分析</li><li>即时雷达与智能投递队列</li><li>50 次针对性简历</li><li>6 次复盘</li><li>人工策略复核</li></ul>
+                <button class="outline-btn" data-checkout="concierge30" type="button">选择陪跑版</button>
+              </article>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="view-career">
+          <div class="page-title">
+            <p class="eyebrow">AI CAREER ANALYSIS / 002</p>
+            <h1>先分析自己，<em>再开始投递。</em></h1>
+            <p>AI 会综合当前行业、工作经历、教育、技能、成果、目标岗位和限制条件，生成个人求职诊断与行动策略。</p>
+          </div>
+          <div class="career-layout">
+            <article class="panel career-intro">
+              <span class="career-orbit">AI</span>
+              <div>
+                <p class="eyebrow">PERSONAL DIAGNOSIS</p>
+                <h3>你的求职准备度</h3>
+                <p>不是性格测试，也不会凭空预测职业。所有判断都来自你填写的真实材料。</p>
+              </div>
+              <button class="primary-btn large" id="career-analyze-btn" type="button">开始 AI 分析 <span>→</span></button>
+              <button class="text-btn" data-go="profile" type="button">先完善个人档案</button>
+            </article>
+            <aside class="analysis-placeholder career-placeholder" id="career-placeholder">
+              <span class="huge-number">AI</span>
+              <h3>等待个人分析</h3>
+              <p>分析结果将包含优势、缺口、适合方向、投递策略和下一步行动。</p>
+            </aside>
+            <article class="analysis-result hidden" id="career-result"></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-personality">
+          <div class="page-title personality-title">
+            <p class="eyebrow">WORK STYLE PROFILE / 003</p>
+            <h1>你适合的，不只是一种岗位，<em>更是一种工作环境。</em></h1>
+            <p>用 12 个工作情境判断你的协作、秩序、探索、节奏、细节与自主偏好，再与真实经历和目标岗位一起分析。</p>
+          </div>
+          <div class="personality-layout">
+            <form class="panel personality-form" id="personality-form">
+              <div class="personality-form-head"><div><p class="eyebrow">12 WORK SCENARIOS</p><h3>选择更接近你的工作状态</h3></div><span>1 不符合 — 5 很符合</span></div>
+              <div class="personality-questions">
+                <label>与人讨论和互动会让我更有能量<select name="peopleEnergy"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>我愿意频繁沟通、协调和推动别人<select name="communication"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>规则、流程和明确标准会让我更安心<select name="structure"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>开始工作前，我习惯先制定计划<select name="planning"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>面对新问题和未知任务，我会感到兴奋<select name="novelty"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>重复、稳定的日常工作不会让我厌烦<select name="routine"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>我能适应多任务和较快的工作节奏<select name="pace"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>计划临时改变时，我能快速切换<select name="changeTolerance"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>我会主动发现别人容易忽略的细节<select name="detail"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>相比速度，我更在意准确与质量<select name="accuracy"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>目标明确后，我希望自己决定工作方法<select name="autonomy"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+                <label>我喜欢主管持续检查并给出具体指令<select name="supervision"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select></label>
+              </div>
+              <div class="personality-disclaimer">这是工作偏好分析，不是临床心理测评，也不会只凭性格替你决定职业。</div>
+              <button class="primary-btn large" id="personality-analyze-btn" type="submit">生成工作风格画像 <span>→</span></button>
+            </form>
+            <aside class="analysis-placeholder personality-placeholder" id="personality-placeholder"><span class="huge-number">12</span><h3>等待你的选择</h3><p>结果会给出工作风格、适合环境、岗位方向、应谨慎的环境和面试验证问题。</p></aside>
+            <article class="analysis-result personality-result hidden" id="personality-result"></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-mbti">
+          <div class="page-title mbti-title">
+            <p class="eyebrow">MBTI CAREER PROFILE / 004</p>
+            <h1>了解偏好，<em>不是给自己贴标签。</em></h1>
+            <p>通过 20 个工作与生活情境识别四组偏好，再结合真实经历生成适合探索的岗位族群、工作环境和风险提醒。</p>
+          </div>
+          <div class="mbti-layout">
+            <form class="panel mbti-form" id="mbti-form">
+              <div class="personality-form-head"><div><p class="eyebrow">20 QUICK CHOICES</p><h3>哪一边更像真实的你？</h3></div><span>约 3 分钟</span></div>
+              <div class="mbti-progress"><span id="mbti-progress-text">已完成 0 / 20</span><div><i id="mbti-progress-bar"></i></div></div>
+              <div class="mbti-questions">
+                <label><span><b>热闹互动让我恢复能量</b><em>独处安静让我恢复能量</em></span><select name="q1" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>我习惯边说边整理想法</b><em>我习惯想清楚再表达</em></span><select name="q2" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>认识很多人让我兴奋</b><em>深入维系少数关系更舒服</em></span><select name="q3" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>会议中我会主动发言</b><em>会议后我更容易形成观点</em></span><select name="q4" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>频繁协作让我保持状态</b><em>连续专注让我保持状态</em></span><select name="q5" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>我先看事实和已有经验</b><em>我先看趋势和潜在可能</em></span><select name="q6" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>具体步骤比宏大概念有用</b><em>整体概念比具体步骤有趣</em></span><select name="q7" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>我信任可验证的细节</b><em>我信任跨信息形成的直觉</em></span><select name="q8" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>我喜欢改进已有方法</b><em>我喜欢发明全新方法</em></span><select name="q9" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>描述真实发生了什么</b><em>讨论未来可能发生什么</em></span><select name="q10" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>决策时优先逻辑一致</b><em>决策时优先人的感受</em></span><select name="q11" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>指出问题比维持气氛重要</b><em>维持关系比指出问题重要</em></span><select name="q12" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>公平意味着标准一致</b><em>公平意味着照顾不同处境</em></span><select name="q13" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>反馈应该直接准确</b><em>反馈应该顾及接受方式</em></span><select name="q14" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>争论观点不会影响关系</b><em>观点冲突容易影响合作感受</em></span><select name="q15" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>提前确定计划让我安心</b><em>保留选择空间让我安心</em></span><select name="q16" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>完成事项后我才放松</b><em>临近截止时我更有动力</em></span><select name="q17" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>明确结论比继续探索重要</b><em>继续探索比快速结论重要</em></span><select name="q18" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>我喜欢按顺序推进任务</b><em>我喜欢根据状态切换任务</em></span><select name="q19" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+                <label><span><b>日程稳定会提升效率</b><em>临时变化会带来新鲜感</em></span><select name="q20" required><option value="">请选择</option><option value="-2">更像左边</option><option value="-1">有点像左边</option><option value="0">差不多</option><option value="1">有点像右边</option><option value="2">更像右边</option></select></label>
+              </div>
+              <div class="personality-disclaimer">MBTI 只描述当前偏好，不代表能力、智力或职业上限。岗位建议仍会结合你的真实经历与技能。</div>
+              <button class="primary-btn large" id="mbti-analyze-btn" type="submit">查看我的 MBTI 职业画像 <span>→</span></button>
+            </form>
+            <aside class="analysis-placeholder mbti-placeholder" id="mbti-placeholder"><span class="huge-number">16</span><h3>等待完成测试</h3><p>结果包含 MBTI 类型、四维倾向、优势、适合岗位族群与工作环境。</p></aside>
+            <article class="analysis-result mbti-result hidden" id="mbti-result"></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-radar">
+          <div class="page-title radar-title">
+            <p class="eyebrow">OPPORTUNITY RADAR / 004</p>
+            <h1>合适的工作出现时，<em>让机会主动提醒你。</em></h1>
+            <p>适用于全部合法职业。根据目标岗位、技能、城市和工作风格生成监控词，统一收集招聘平台、企业官网和社交内容中的工作机会。</p>
+          </div>
+
+          <div class="radar-control-grid">
+            <form class="panel radar-settings" id="radar-form">
+              <div class="radar-head"><div><p class="eyebrow">MONITOR SETTINGS</p><h3>我的机会监控</h3></div><span class="radar-live" id="radar-live-status">尚未开启</span></div>
+              <label>监控关键词<input name="keywords" id="radar-keywords" placeholder="岗位、行业、技能，以逗号分隔" /></label>
+              <div class="form-row two-cols"><label>目标城市<input name="cities" placeholder="上海、杭州、远程" /></label><label>提醒频率<select name="frequency"><option value="instant">发现后立即提醒</option><option value="daily">每天汇总一次</option><option value="weekly">每周汇总一次</option></select></label></div>
+              <fieldset class="source-checks"><legend>希望关注的来源</legend><label><input type="checkbox" name="sources" value="boss" checked />BOSS 直聘</label><label><input type="checkbox" name="sources" value="xiaohongshu" checked />小红书</label><label><input type="checkbox" name="sources" value="douyin" checked />抖音</label><label><input type="checkbox" name="sources" value="official" checked />企业官网／公开订阅</label></fieldset>
+              <div class="radar-actions"><button class="primary-btn" type="submit">保存并开启监控</button><button class="outline-btn" id="enable-notifications" type="button">开启浏览器通知</button></div>
+              <p class="connector-note">未授权的平台目前使用“用户分享链接＋系统匹配”；获得官方 API 权限后可切换为后台自动扫描。</p>
+            </form>
+
+            <div class="source-status-grid">
+              <article><div><strong>BOSS 直聘</strong><span>需官方授权</span></div><p>当前支持粘贴职位链接与 JD；不接管账号，不自动操作平台。</p></article>
+              <article><div><strong>小红书</strong><span>分享链接模式</span></div><p>用户看到招聘笔记后分享给雷达分析；全站自动搜索需平台授权能力。</p></article>
+              <article><div><strong>抖音</strong><span>需申请权限</span></div><p>官方关键词视频搜索属于特殊权限，审核通过后才能自动连接。</p></article>
+              <article><div><strong>企业官网／公开 ATS</strong><span class="ready">已接入</span></div><p>现可连接公开招聘页、Greenhouse 与 Lever；登录后可保存为后台同步源。</p></article>
+            </div>
+          </div>
+
+          <section class="panel source-collector-panel">
+            <div class="source-collector-copy"><p class="eyebrow">AUTHORIZED COLLECTION</p><h2>连接公开招聘源</h2><p>直接读取企业公开招聘页，或连接 Greenhouse／Lever 的公开职位接口。系统会过滤过期岗位、去重并标注风险。</p></div>
+            <form id="source-collector-form" class="source-collector-form">
+              <label>来源类型<select name="type"><option value="official">企业公开招聘页</option><option value="greenhouse">Greenhouse Board</option><option value="lever">Lever Site</option></select></label>
+              <label>网页地址或来源标识<input name="target" required placeholder="https://company.com/careers/job 或 board token" /></label>
+              <button class="primary-btn" id="collect-source-btn" type="submit">同步公开岗位</button>
+            </form>
+            <div class="collector-status" id="collector-status">只读取无需登录的公开招聘信息；不绕过网站限制。</div>
+          </section>
+
+          <div class="radar-workspace">
+            <form class="panel opportunity-form" id="opportunity-form">
+              <div><p class="eyebrow">ADD AN OPPORTUNITY</p><h3>粘贴一条工作机会</h3><p>把小红书、抖音、BOSS 或企业官网看到的内容放进来，系统会立即判断是否适合你。</p></div>
+              <label>来源<select name="source"><option value="xiaohongshu">小红书</option><option value="douyin">抖音</option><option value="boss">BOSS 直聘</option><option value="official">企业官网</option><option value="other">其他来源</option></select></label>
+              <label>机会标题<input name="title" required placeholder="例如：上海宠物医院招聘宠物医生" /></label>
+              <label>发布者／公司<input name="publisher" placeholder="账号名称或企业名称" /></label>
+              <label>原始链接<input name="url" type="url" placeholder="https://…" /></label>
+              <label>发布内容或职位描述<textarea name="description" rows="7" placeholder="粘贴招聘内容、岗位要求或视频文案……"></textarea></label>
+              <button class="primary-btn" type="submit">分析并加入雷达</button>
+            </form>
+            <section class="radar-feed"><div class="radar-feed-head"><div><p class="eyebrow">MATCHED OPPORTUNITIES</p><h2>机会提醒</h2></div><span id="radar-count">0 条</span></div><div id="radar-opportunities" class="opportunity-list"></div></section>
+          </div>
+        </section>
+
+        <section class="view" id="view-autoapply">
+          <div class="page-title autoapply-title">
+            <p class="eyebrow">BOSS APPLICATION ASSISTANT / 005</p>
+            <h1>自动筛选合适岗位，<em>准备好再集中投递。</em></h1>
+            <p>系统对已经导入雷达的 BOSS 岗位自动评分、排除风险、生成专属简历与招呼语。获得 BOSS 官方接口后可自动提交；当前由你在官方页面完成最后确认。</p>
+          </div>
+
+          <div class="connector-banner" id="boss-connector-banner">
+            <div><span class="connector-light"></span><div><strong id="boss-connector-title">正在检查 BOSS 连接状态</strong><p id="boss-connector-copy">未读取或保存你的 BOSS 账号密码。</p></div></div>
+            <span id="boss-connector-mode">CHECKING</span>
+          </div>
+
+          <div class="autoapply-grid">
+            <form class="panel autoapply-settings" id="autoapply-form">
+              <div><p class="eyebrow">APPLICATION RULES</p><h3>我的自动筛选规则</h3><p>规则越严格，队列越少，但有效回复的概率通常更高。</p></div>
+              <label>最低匹配分<select name="threshold"><option value="72">72 分 · 扩大机会</option><option value="80" selected>80 分 · 推荐</option><option value="88">88 分 · 严格筛选</option></select></label>
+              <label>每日最多准备<select name="dailyLimit"><option value="5">5 个岗位</option><option value="10" selected>10 个岗位</option><option value="20">20 个岗位</option><option value="30">30 个岗位</option></select></label>
+              <label>排除关键词<input name="excludedKeywords" placeholder="保险、销售、异地、单休……" /></label>
+              <label>简历版本<select name="resumeMode"><option value="targeted">优先使用 AI 针对性简历</option><option value="profile">使用个人档案简历</option></select></label>
+              <label class="check-row"><input name="truthConfirmed" type="checkbox" required /><span>我确认所有简历内容均为真实经历，并会在提交前检查。</span></label>
+              <button class="primary-btn large" id="prepare-boss-queue" type="submit">准备所有合适岗位 <span>→</span></button>
+              <small class="form-hint">只处理机会雷达中已导入的 BOSS 岗位，不登录、不爬取、不代替你绕过平台确认。</small>
+            </form>
+
+            <aside class="autoapply-summary">
+              <div class="autoapply-number"><strong id="boss-source-count">0</strong><span>已导入 BOSS 岗位</span></div>
+              <div class="autoapply-number highlight"><strong id="boss-ready-count">0</strong><span>符合当前规则</span></div>
+              <div class="autoapply-number"><strong id="boss-submitted-count">0</strong><span>已经确认投递</span></div>
+              <button class="outline-btn" data-go="radar" type="button">去机会雷达导入岗位</button>
+            </aside>
+          </div>
+
+          <section class="application-queue-section">
+            <div class="section-heading"><div><p class="eyebrow">APPLICATION QUEUE</p><h2>待投递队列</h2></div><span class="section-note" id="boss-queue-status">等待生成</span></div>
+            <div class="application-queue" id="boss-application-queue"></div>
+          </section>
+        </section>
+
+        <section class="view" id="view-resume">
+          <div class="page-title">
+            <p class="eyebrow">AI RESUME STUDIO / 006</p>
+            <h1>不是润色，<em>是为目标岗位重组证据。</em></h1>
+            <p>AI 只使用你已经提供的真实经历，调整顺序、表达和关键词，不虚构项目、数字或能力。</p>
+          </div>
+          <div class="resume-layout">
+            <form class="panel form-panel resume-form" id="resume-form">
+              <h3>改写目标</h3>
+              <label>目标岗位<input name="targetRole" required placeholder="例如：供应链主管" /></label>
+              <label>目标岗位描述（推荐）<textarea name="jobDescription" rows="9" placeholder="粘贴 JD，AI 会根据真实匹配点调整简历重点。"></textarea></label>
+              <label>表达侧重点<select name="focus"><option value="results">成果与业务结果</option><option value="skills">技能与专业能力</option><option value="management">管理与协作</option><option value="transition">转行可迁移能力</option></select></label>
+              <div class="privacy-note"><strong>真实优先</strong><span>不会补写你没有提供的经历。缺少证据的岗位要求会单独列出，交给你确认。</span></div>
+              <button class="primary-btn large" id="rewrite-resume-btn" type="submit">AI 改写简历 <span>→</span></button>
+              <span class="form-hint" id="resume-hint">改写前请先保存个人档案</span>
+            </form>
+            <aside class="analysis-placeholder resume-placeholder" id="resume-placeholder">
+              <span class="huge-number">CV</span>
+              <h3>等待改写</h3>
+              <p>结果会包含新版简历、调整说明，以及还需要你补充核实的证据。</p>
+            </aside>
+            <article class="analysis-result resume-result hidden" id="resume-result"></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-analyze">
+          <div class="page-title">
+            <p class="eyebrow">JOB MATCH / 007</p>
+            <h1>这个岗位，<em>值得投吗？</em></h1>
+            <p>粘贴真实职位信息。系统会核对硬条件、材料证据与主要风险。</p>
+          </div>
+
+          <div class="analyze-layout">
+            <form class="panel form-panel" id="job-form">
+              <div class="form-row two-cols">
+                <label>公司名称<input name="company" placeholder="例如：某消费品牌" /></label>
+                <label>所属行业<input name="industry" list="industry-options" placeholder="输入或选择任意行业" /></label>
+              </div>
+              <div class="form-row two-cols">
+                <label>岗位名称<input name="title" required placeholder="例如：产品经理、会计、销售" /></label>
+                <label>投递渠道<select name="channel"><option value="platform">招聘平台网页</option><option value="official">企业官方申请页</option><option value="email">企业招聘邮箱</option></select></label>
+              </div>
+              <div class="form-row two-cols">
+                <label>工作地点<input name="location" placeholder="例如：上海" /></label>
+                <label>薪资范围<input name="salary" placeholder="例如：15–20K" /></label>
+              </div>
+              <label>岗位链接或招聘邮箱<input name="applicationTarget" placeholder="https://… 或 jobs@example.com" /></label>
+              <label>职位描述（JD）<textarea name="description" required rows="14" placeholder="粘贴岗位职责、任职要求和加分项……"></textarea></label>
+              <label class="check-row"><input type="checkbox" name="confirmTruth" required /><span>我会人工核对生成内容，不会把不存在的经历写进简历。</span></label>
+              <div class="form-actions">
+                <button class="primary-btn large" id="analyze-btn" type="submit">分析岗位 <span>→</span></button>
+                <span class="form-hint" id="analysis-hint">通常需要几秒钟</span>
+              </div>
+            </form>
+
+            <aside class="analysis-placeholder" id="analysis-placeholder">
+              <span class="huge-number">?</span>
+              <h3>等待职位信息</h3>
+              <p>完成分析后，这里会显示投递建议、匹配证据、风险和开场话术。</p>
+            </aside>
+            <article class="analysis-result hidden" id="analysis-result"></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-pipeline">
+          <div class="page-title compact-title">
+            <p class="eyebrow">APPLICATION CENTER / 008</p>
+            <h1>准备材料，<em>管理每次投递。</em></h1>
+            <p>系统自动生成投递材料包。官方授权渠道可接入自动发送；招聘平台网页保留最后确认。</p>
+          </div>
+          <div class="pipeline-toolbar">
+            <div class="filter-group" id="pipeline-filters"></div>
+            <button class="outline-btn" data-go="analyze" type="button">＋ 添加岗位</button>
+          </div>
+          <div class="pipeline-table-wrap">
+            <table class="pipeline-table">
+              <thead><tr><th>岗位</th><th>建议</th><th>匹配</th><th>投递方式</th><th>当前阶段</th><th>更新时间</th><th></th></tr></thead>
+              <tbody id="pipeline-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="view" id="view-service">
+          <div class="page-title service-title">
+            <p class="eyebrow">14-DAY CAREER SPRINT / 009</p>
+            <h1>14 天，把求职变成<em>可执行、可判断、可复盘。</em></h1>
+            <p>不是无限海投。先选对岗位，再准备真实材料，用两次结果复盘修正方向和表达。</p>
+          </div>
+
+          <div class="service-offer">
+            <article class="service-price-card">
+              <div class="service-price-top"><span>14 天求职方案</span><strong><small>¥</small>59</strong></div>
+              <p>一次开通，14 天内完成从方向判断到投递复盘的完整闭环。</p>
+              <div class="service-status-row"><span id="service-plan-status">当前为免费体验</span><span id="service-analysis-usage">已使用 0 / 10</span></div>
+              <button class="primary-btn" id="service-upgrade-plan" data-checkout="sprint14" type="button">开通 59 元方案</button>
+              <small class="payment-note">包含合理使用范围内 100 次岗位分析；正式支付通道配置完成后才能付款激活。</small>
+            </article>
+            <div class="deliverables-grid">
+              <article><span>01</span><h3>100 次岗位判断</h3><p>14 天内按合理使用规则分析最多 100 个岗位，解释匹配证据、硬条件和主要风险。</p></article>
+              <article><span>02</span><h3>针对性简历</h3><p>按照目标岗位和 JD 重组真实经历，不编造项目、数字或能力。</p></article>
+              <article><span>03</span><h3>每日投递策略</h3><p>明确每天该筛选、准备、投递和跟进什么，避免无目的海投。</p></article>
+              <article><span>04</span><h3>两次结果复盘</h3><p>根据回复率和面试率判断问题发生在岗位、简历、沟通还是面试。</p></article>
+              <article><span>05</span><h3>BOSS 智能投递</h3><p>自动筛选已导入的高匹配岗位并生成材料；当前跳转官方页面确认，取得官方接口后可授权提交。</p></article>
+            </div>
+          </div>
+
+          <div class="section-heading service-section-heading"><div><p class="eyebrow">DELIVERY ROADMAP</p><h2>你会经历的 14 天</h2></div><span class="section-note">以真实投递结果为依据</span></div>
+          <div class="service-timeline">
+            <article><span>DAY 01—02</span><h3>定位与材料</h3><p>完成个人分析、确定主投和备选方向、生成第一版针对性简历。</p></article>
+            <article><span>DAY 03—06</span><h3>小批量验证</h3><p>筛选高匹配岗位，建立投递队列，记录每次投递的渠道与状态。</p></article>
+            <article><span>DAY 07</span><h3>第一次复盘</h3><p>检查有效回复率，修正岗位选择、关键词、成果表达和招呼语。</p></article>
+            <article><span>DAY 08—13</span><h3>第二轮投递</h3><p>使用修正版策略继续投递，对比前后数据，不凭感觉判断效果。</p></article>
+            <article><span>DAY 14</span><h3>第二次复盘</h3><p>总结有效岗位画像、材料版本和后续行动，形成可继续使用的方法。</p></article>
+          </div>
+
+          <div class="review-grid">
+            <article class="review-card"><div><span>RESULT REVIEW / 01</span><strong id="review-one-status">开通后可用</strong></div><h3>第一次结果复盘</h3><p>建议在累计 10—20 次真实投递后进行。</p><button class="outline-btn" data-review="1" type="button">查看复盘条件</button></article>
+            <article class="review-card"><div><span>RESULT REVIEW / 02</span><strong id="review-two-status">开通后可用</strong></div><h3>第二次结果复盘</h3><p>建议在调整策略并完成第二轮投递后进行。</p><button class="outline-btn" data-review="2" type="button">查看复盘条件</button></article>
+          </div>
+          <article class="analysis-result review-result hidden" id="review-result"></article>
+        </section>
+
+        <section class="view" id="view-profile">
+          <div class="page-title compact-title">
+            <p class="eyebrow">CANDIDATE PROFILE / 010</p>
+            <h1>你的经历，<em>决定分析质量。</em></h1>
+            <p>适用于全部行业。行业和岗位都可以自由输入，请只填写真实经历。</p>
+          </div>
+          <form class="profile-layout" id="profile-form">
+            <div class="panel form-panel">
+              <h3>求职目标</h3>
+              <div class="form-row two-cols">
+                <label>称呼<input name="name" placeholder="如何称呼你" /></label>
+                <label>工作年限<input name="yearsExperience" type="number" min="0" max="40" placeholder="3" /></label>
+              </div>
+              <div class="form-row two-cols">
+                <label>当前／上一行业<input name="currentIndustry" list="industry-options" placeholder="输入或选择行业" /></label>
+                <label>当前／上一岗位<input name="currentRole" placeholder="例如：招商主管" /></label>
+              </div>
+              <label>最高学历<input name="education" placeholder="例如：本科·市场营销" /></label>
+              <label>目标行业<input name="targetIndustries" list="industry-options" placeholder="可填写多个，以逗号分隔；也可自由输入" /></label>
+              <label>目标岗位<input name="targetRoles" placeholder="可填写主投和备选岗位，以逗号分隔" /></label>
+              <div class="form-row two-cols">
+                <label>目标城市<input name="city" placeholder="上海、杭州或远程" /></label>
+                <label>期望薪资<input name="salary" placeholder="15–20K" /></label>
+              </div>
+              <label>优先考虑<textarea name="priorities" rows="4" placeholder="行业、公司阶段、成长空间、工作方式……"></textarea></label>
+              <label>硬性排除项<textarea name="exclusions" rows="3" placeholder="不能接受的地点、行业、薪资或工作方式……"></textarea></label>
+            </div>
+            <div class="panel form-panel">
+              <h3>真实材料</h3>
+              <label class="resume-upload-label">上传简历文件<span>本地支持 TXT、PDF、DOCX；扫描版 PDF 需要 OCR</span><input id="resume-file" type="file" accept=".txt,.pdf,.docx,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" /></label>
+              <label>核心技能<input name="skills" placeholder="销售、Excel、Java、招聘、护理……以逗号分隔" /></label>
+              <label>代表成果<textarea name="achievements" rows="5" placeholder="写出项目规模、数字、效率、收入、成本、质量或其他真实结果。"></textarea></label>
+              <label>简历文本<textarea name="resumeText" rows="15" required placeholder="粘贴简历正文。请删除身份证号、精确住址等无关敏感信息。"></textarea></label>
+              <label>补充材料<textarea name="extraMaterials" rows="6" placeholder="作品集、证书、项目、论文、执照或其他与目标岗位有关的材料。"></textarea></label>
+              <div class="privacy-note"><strong>本地优先</strong><span>档案默认只保存在这个浏览器。启用 AI 时，分析所需文本会发送给配置的模型服务。</span></div>
+              <button class="primary-btn large" type="submit">保存求职档案</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="view" id="view-settings">
+          <div class="page-title compact-title">
+            <p class="eyebrow">DATA CONTROL / 011</p>
+            <h1>你的资料，<em>由你控制。</em></h1>
+          </div>
+          <div class="settings-grid">
+            <article class="panel setting-card">
+              <span class="setting-index">01</span><h3>导出数据</h3>
+              <p>下载包含求职档案、岗位分析和投递状态的 JSON 备份。</p>
+              <button class="outline-btn" id="export-data" type="button">下载备份</button>
+            </article>
+            <article class="panel setting-card">
+              <span class="setting-index">02</span><h3>导入数据</h3>
+              <p>从本程序生成的备份恢复数据。现有数据会被备份内容替换。</p>
+              <label class="outline-btn file-btn">选择备份<input id="import-data" type="file" accept="application/json" /></label>
+            </article>
+            <article class="panel setting-card danger-card">
+              <span class="setting-index">03</span><h3>删除全部数据</h3>
+              <p>清除当前浏览器中的档案和全部岗位记录，此操作无法撤销。</p>
+              <button class="danger-btn" id="delete-data" type="button">永久删除</button>
+            </article>
+          </div>
+          <section class="account-commerce-grid">
+            <article class="panel account-panel">
+              <div><p class="eyebrow">ACCOUNT & CLOUD</p><h2>账号与云端同步</h2><p>注册后可把当前浏览器数据同步到自己的账号，并在其他设备恢复。</p></div>
+              <div id="account-logged-out">
+                <form id="account-form" class="account-form">
+                  <div class="auth-mode-switch"><button type="button" class="is-active" data-auth-mode="login">登录</button><button type="button" data-auth-mode="register">注册</button></div>
+                  <label class="register-only hidden">称呼<input name="name" placeholder="如何称呼你" /></label>
+                  <label>邮箱<input name="email" type="email" required autocomplete="email" /></label>
+                  <label>密码<input name="password" type="password" minlength="8" required autocomplete="current-password" /></label>
+                  <button class="primary-btn" id="account-submit" type="submit">登录并同步</button>
+                </form>
+              </div>
+              <div id="account-logged-in" class="hidden">
+                <div class="account-identity"><strong id="account-name">—</strong><span id="account-email">—</span><small id="account-plan">免费体验</small></div>
+                <div class="account-actions"><button class="primary-btn" id="cloud-upload" type="button">同步当前数据</button><button class="outline-btn" id="cloud-download" type="button">恢复云端数据</button><button class="text-btn" id="account-logout" type="button">退出账号</button><button class="text-btn" id="account-delete" type="button">删除账号及云端数据</button></div>
+              </div>
+            </article>
+            <article class="panel integration-panel">
+              <div><p class="eyebrow">COMMERCIAL READINESS</p><h2>商业接口状态</h2></div>
+              <div class="integration-list" id="integration-list"></div>
+              <p class="integration-note">本地能力会直接启用；支付和平台接口必须使用你自己的官方主体与授权，系统不会伪造接入状态。</p>
+            </article>
+          </section>
+          <article class="panel mode-panel">
+            <div><p class="eyebrow">ANALYSIS MODE</p><h3 id="settings-mode">正在检查</h3></div>
+            <p id="settings-mode-detail">程序会自动选择可用模式。</p>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <dialog id="job-dialog" class="job-dialog"><div id="job-dialog-content"></div><button class="dialog-close" type="button" aria-label="关闭">×</button></dialog>
+    <datalist id="industry-options">
+      <option value="互联网与软件"></option><option value="人工智能与数据"></option><option value="电子商务"></option>
+      <option value="金融与银行"></option><option value="保险"></option><option value="咨询与专业服务"></option>
+      <option value="消费品与零售"></option><option value="广告传媒与文化"></option><option value="教育培训"></option>
+      <option value="医疗健康"></option><option value="医药与生物科技"></option><option value="制造业"></option>
+      <option value="汽车与新能源"></option><option value="建筑与房地产"></option><option value="物流与供应链"></option>
+      <option value="能源与化工"></option><option value="政府与公共事业"></option><option value="法律"></option>
+      <option value="人力资源"></option><option value="旅游酒店与餐饮"></option><option value="农业与食品"></option>
+    </datalist>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
